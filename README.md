@@ -1,5 +1,6 @@
 # Dream Index
-A platform for writing down, sharing, and getting inspirations from dreams.
+中文名待定（逃
 
-For current research and plans, see [this mind map](https://docs.qq.com/mind/DRXJuaFphZG5qeWpT). For more information, email
-me at CynthiaWang7979@hotmail.com.
+记梦、分享梦、和从梦中找到灵感的平台。
+
+目前的调研结果和计划请见[在线思维导图](https://docs.qq.com/mind/DRXJuaFphZG5qeWpT)。更多信息请私信/邮件我：CynthiaWang7979@hotmail.com
