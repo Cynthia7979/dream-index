@@ -16,3 +16,13 @@ def random_dream():
 @app.route('/rand/fanart')
 def random_fanart():
     return '<p>Hello, World!</p>'
+
+
+@app.route('/new/dream')
+def create_dream():
+    return '<p>Hello, World!</p>'
+
+
+@app.route('/new/fanart')
+def create_fanart(dream_url):
+    return '<p>Hello, World!</p>'
