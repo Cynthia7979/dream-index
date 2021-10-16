@@ -10,3 +10,5 @@
 ## 外部链接
 * 调研结果和计划：[在线思维导图](https://docs.qq.com/mind/DRXJuaFphZG5qeWpT)
 * Flask简化版教程及第三方库笔记：[Cynthia7979/flask-test](https://github.com/Cynthia7979/flask-test)
+* Flask官方文档：[Flask Documentation 2.0.x](http://flask.pocoo.org)
+* Jinja官方文档：[Jinja Documentation 2.0.x](https://jinja.palletsprojects.com/en/3.0.x/)
