@@ -2,3 +2,4 @@
 .idea/
 src/__pycache__/
 *.pyc
+src/dreamindex.egg-info
