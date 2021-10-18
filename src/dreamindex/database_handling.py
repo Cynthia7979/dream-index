@@ -20,16 +20,17 @@ Refer to the following link for additional naming conventions:
 https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions
 """
 import sqlite3
-
-DATABASE_PATH = "./databases/test_database.db"
+import os
 
 
 class Database:
-    def __init__(self, database_path=DATABASE_PATH):
+    def __init__(self, database_path):
+        print(os.getcwd())
+        print(os.path.exists(database_path), database_path, os.path._getfullpathname(database_path))
         self.conn = sqlite3.connect(database_path)
         self.cur = self.conn.cursor()
 
-    def setup_database(self):
+    def setup(self):
         # Create article tables
         # Notes:
         #   NumberOfComments needs to be incremented every time a new comment is created
