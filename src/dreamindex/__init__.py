@@ -8,3 +8,6 @@ app = Flask(__name__)  # Flask Documentation: Import arbitrary modules *after* c
 
 import dreamindex.views
 import dreamindex.instances
+import dreamindex.database_handling
+
+db = database_handling.Database()
