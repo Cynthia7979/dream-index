@@ -6,17 +6,22 @@
 
 ## 目录结构
 `Documents/` 项目相关原型及流程图文件  
-&nbsp;&nbsp;&nbsp;&nbsp;└ \*
+&nbsp;&nbsp;&nbsp;&nbsp;└ `TODO.md` 未完成，或者是临时要做任务的备忘录  
+&nbsp;&nbsp;&nbsp;&nbsp;└ \*（剩余文件省略说明）
 
-`src/`    
-&nbsp;&nbsp;&nbsp;&nbsp;└ `run.bat` 快捷本地部署  
-&nbsp;&nbsp;&nbsp;&nbsp;└ `setup.py` 本地包调试文件（用于文件之间互相引用）  
-&nbsp;&nbsp;&nbsp;&nbsp;└ `dreamindex/` 网站代码  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `__init__.py` 主代码，包括路由、前端相关的信息抓取等  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `database/` 数据库（`*.db`)文件目录  
+`src/`  
+&nbsp;&nbsp;&nbsp;&nbsp;└ `dreamindex/`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `database/` 数据库`*.db`文件目录  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `dev/` 开发用工具目录  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `setup_database.py` 初始化数据库工具  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `logs/` 日志文件目录  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `static/` 静态文件目录，如CSS、图片等  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `templates/` 模板文件目录  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `dev/` 开发用工具  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `instances.py` 定义全局可见的类  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `views.py` 设置网站路由  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ \*（剩余文件省略说明）    
+&nbsp;&nbsp;&nbsp;&nbsp;└ `run.bat` 快捷本地部署  
+&nbsp;&nbsp;&nbsp;&nbsp;└ `setup.py` 本地包调试文件（用于文件之间互相引用）  
 
 ## 运行
 运行`src`目录下的`run.bat`.

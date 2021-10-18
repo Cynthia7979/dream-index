@@ -1,5 +1,6 @@
 # TODO.md
 
 ## Backend (Python Code)
-- [ ] Logger
-- [ ]
+- [ ] Finish up Logger Module
+- [ ] Finish up debugging database setup
+- [ ] Make the other database interaction utilities 增删改查
