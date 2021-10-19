@@ -12,4 +12,4 @@ db = database_handling.Database(database_path=os.path.dirname(__file__)+"/databa
 import dreamindex.views
 import dreamindex.instances
 import dreamindex.logging
-
+# setup_database is not imported because it is not part of the package.
