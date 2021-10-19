@@ -11,4 +11,5 @@ db = database_handling.Database(database_path=os.path.dirname(__file__)+"/databa
 
 import dreamindex.views
 import dreamindex.instances
+import dreamindex.logging
 

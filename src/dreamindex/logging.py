@@ -1,22 +1,37 @@
 import logging
-import datetime
+import sys
+from datetime import datetime
 from os.path import dirname
 
-root_logger = logging.getLogger("Dream Index")
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)7s | %(message)s')
+root_logger = logging.getLogger("DreamIndex")
 root_logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler(dirname(__file__)+"/logs/")
+_handlers = (
+    logging.FileHandler(
+        dirname(__file__)+f"/logs/dreamindex_log_{datetime.now().strftime('%Y%m%d-%H%M%S')}.log"
+    ),
+    # logging.StreamHandler(sys.stdout)
+)
+
+
+def config_handlers(logger: logging.Logger):
+    for handler in _handlers:
+        logger.addHandler(handler)
+    root_logger.debug(f"Added handlers for {logger.name}")
+
 
 def get_file_logger(name):
-    return logging.getLogger(name)
+    logger = logging.getLogger(name)
+    config_handlers(logger)
+    return logger
 
 
 # Logged decorator
 # copied from my other project ~Cynthia
-def logged(cls, fname):
+def logged(cls):
     class_name = cls.__name__
-    logger = logging.getLogger('Tool-Program.{}.{}'.format(fname, cls))
+    logger = logging.getLogger(f'DreamIndex.{class_name}')
     logger.setLevel(logging.DEBUG)
-    logger.addHandler(file_handler)
-    logger.propagate = False
+    config_handlers(logger)
     setattr(cls, 'logger', logger)
     return cls
