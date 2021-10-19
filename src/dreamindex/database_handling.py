@@ -57,68 +57,92 @@ class Database:
             #   NumberOfComments needs to be manually incremented every time a new comment is created
             #   Content is raw HTML
             self.cur.execute("""CREATE TABLE Dream (
-                        ID INT PRIMARY KEY,
-                        Title TEXT,
-                        AuthorID INT REFERENCES User (ID),
-                        PublishTime TEXT NOT NULL,
-                        Content TEXT,
-                        NumberOfLikes INT DEFAULT 0,
-                        NumberOfComments INT DEFAULT 0,
-                        NumberOfViews INT DEFAULT 0
+                        DreamID             INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Title               TEXT    NOT NULL,
+                        AuthorID            INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        NumberOfLikes       INT     DEFAULT 0,
+                        NumberOfComments    INT     DEFAULT 0,
+                        NumberOfViews       INT     DEFAULT 0,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID)
                     );""")
             self.cur.execute("""CREATE TABLE FanArt (
-                        ID INT PRIMARY KEY,
-                        Title TEXT,
-                        FatherDreamID INT REFERENCES Dream (ID),
-                        AuthorID INT REFERENCES User (ID),
-                        PublishTime TEXT NOT NULL,
-                        Content TEXT,
-                        NumberOfLikes INT DEFAULT 0,
-                        NumberOfComments INT DEFAULT 0
+                        FanArtID            INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Title               TEXT    NOT NULL,
+                        FatherDreamID       INT,
+                        AuthorID            INT,
+                        PublishTime         TEXT    NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        NumberOfLikes       INT     DEFAULT 0,
+                        NumberOfComments    INT     DEFAULT 0,
+                        FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID),
+                        FOREIGN KEY (AuthorID)      REFERENCES User (UserID)
                     );""")
 
-            self.logger.debug('Creating tables: Character junction tables')
+            self.logger.debug('Creating tables: User table')
+            self.conn.execute("""CREATE TABLE User (
+                        UserID              INTEGER PRIMARY KEY AUTOINCREMENT,
+                        UserName            TEXT    NOT NULL
+                    );""")
+            # User avatar should be stored with filename UserID.
+
+            self.logger.debug('Creating tables: Character table')
+            self.cur.execute("""CREATE TABLE Character (
+                        CharacterID         INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Name                TEXT    NOT NULL,
+                        Description         TEXT    NOT NULL,
+                        AuthorID            INT     NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID)
+                    );""")
+
+            self.logger.debug('Creating tables: Dream-Character junction table')
             # Create junction tables for dream-character and author-character relationships
             self.cur.execute("""CREATE TABLE DreamCharacterJoin (
-                        DreamID INT REFERENCES Dream (ID),
-                        CharacterID INT REFERENCES Character (ID),
+                        DreamID             INT,
+                        CharacterID         INT,
+                        FOREIGN KEY (DreamID)       REFERENCES Dream (DreamID),
+                        FOREIGN KEY (CharacterID)   REFERENCES Character (CharacterID)
                         CONSTRAINT pk_DreamCharacterJoin PRIMARY KEY (DreamID, CharacterID)
                     );""")
-            self.cur.execute("""CREATE TABLE AuthorCharacterJoin (
-                        AuthorID INT REFERENCES Dream (ID),
-                        CharacterID INT REFERENCES Character (ID),
-                        CONSTRAINT pk_AuthorCharacterJoin PRIMARY KEY (AuthorID, CharacterID)
-                    );""")
 
-            self.logger.debug('Creating tables: Comment junction tables')
+            self.logger.debug('Creating tables: Comment tables')
             # Create junction tables for comments and secondary comments (replies)
             self.cur.execute("""CREATE TABLE DreamComment (
-                        ID INT PRIMARY KEY,
-                        AuthorID INT REFERENCES User (ID),
-                        Content TEXT NOT NULL,
-                        FatherDreamID INT REFERENCES Dream (ID) NOT NULL,
-                        PublishTime TEXT NOT NULL
+                        CommentID           INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT     NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        FatherDreamID       INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID)
                     );""")
             self.cur.execute("""CREATE TABLE SecondaryDreamComment (
-                        ID INT PRIMARY KEY,
-                        AuthorID INT REFERENCES Users (ID),
-                        Content TEXT NOT NULL,
-                        FatherCommentID INT REFERENCES DreamComment (ID) NOT NULL,
-                        PublishTime TEXT NOT NULL
+                        SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT,
+                        Content             TEXT    NOT NULL,
+                        FatherCommentID     INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherCommentID) REFERENCES DreamComment (CommentID)
                     );""")
             self.cur.execute("""CREATE TABLE FanArtComment (
-                        ID INT PRIMARY KEY,
-                        AuthorID INT REFERENCES User (ID),
-                        Content TEXT NOT NULL,
-                        FatherFanArtID INT REFERENCES FanArt (ID) NOT NULL,
-                        PublishTime TEXT NOT NULL
+                        CommentID           INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT     NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        FatherFanArtID      INT     NOT NULL,
+                        PublishTime T       EXT     NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherFanArtID) REFERENCES FanArt (FanArtID)
                     );""")
             self.cur.execute("""CREATE TABLE SecondaryFanArtComment (
-                        ID INT PRIMARY KEY,
-                        AuthorID INT REFERENCES Users (ID),
-                        Content TEXT NOT NULL,
-                        FatherCommentID INT REFERENCES FanArtComment (ID) NOT NULL,
-                        PublishTime TEXT NOT NULL
+                        SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT,
+                        Content             TEXT    NOT NULL,
+                        FatherCommentID     INT,
+                        PublishTime         TEXT    NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES Users (UserID),
+                        FOREIGN KEY (FatherCommentID) REFERENCES FanArtComment (CommentID) 
                     );""")
 
             self.conn.commit()
