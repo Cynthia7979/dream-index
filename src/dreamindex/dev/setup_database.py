@@ -1,3 +1,5 @@
 from dreamindex import database_handling, db
 
-db.setup(True)
+# db.setup()
+# Test code - remove in production
+db.get_dreams(count=4)

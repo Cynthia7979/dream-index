@@ -31,6 +31,16 @@ class Database:
         self._connet()
         self.logger.info(f"Database instance on {self.database_path} is created.")
 
+    def get_dreams(self, count=1, sort='PublishTime', order='desc', condition=""):
+        self.cur.execute(f"""SELECT * FROM Dream
+                        {'WHERE'+condition if condition else ''}
+                        ORDER BY {sort} {order.upper()}
+                        LIMIT {count}
+                    ;""")
+        result = self.cur.fetchall()
+        for row in result:
+            print(row)
+
     def _connet(self):
         self.conn = sqlite3.connect(self.database_path)
         self.cur = self.conn.cursor()
@@ -70,8 +80,8 @@ class Database:
             self.cur.execute("""CREATE TABLE FanArt (
                         FanArtID            INTEGER PRIMARY KEY AUTOINCREMENT,
                         Title               TEXT    NOT NULL,
-                        FatherDreamID       INT,
-                        AuthorID            INT,
+                        FatherDreamID       INT     NOT NULL,
+                        AuthorID            INT     NOT NULL,
                         PublishTime         TEXT    NOT NULL,
                         Content             TEXT    NOT NULL,
                         NumberOfLikes       INT     DEFAULT 0,
@@ -99,8 +109,8 @@ class Database:
             self.logger.debug('Creating tables: Dream-Character junction table')
             # Create junction tables for dream-character and author-character relationships
             self.cur.execute("""CREATE TABLE DreamCharacterJoin (
-                        DreamID             INT,
-                        CharacterID         INT,
+                        DreamID             INT     NOT NULL,
+                        CharacterID         INT     NOT NULL,
                         FOREIGN KEY (DreamID)       REFERENCES Dream (DreamID),
                         FOREIGN KEY (CharacterID)   REFERENCES Character (CharacterID)
                         CONSTRAINT pk_DreamCharacterJoin PRIMARY KEY (DreamID, CharacterID)
@@ -119,7 +129,7 @@ class Database:
                     );""")
             self.cur.execute("""CREATE TABLE SecondaryDreamComment (
                         SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
-                        AuthorID            INT,
+                        AuthorID            INT     NOT NULL,
                         Content             TEXT    NOT NULL,
                         FatherCommentID     INT     NOT NULL,
                         PublishTime         TEXT    NOT NULL,
@@ -137,9 +147,9 @@ class Database:
                     );""")
             self.cur.execute("""CREATE TABLE SecondaryFanArtComment (
                         SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
-                        AuthorID            INT,
+                        AuthorID            INT     NOT NULL,
                         Content             TEXT    NOT NULL,
-                        FatherCommentID     INT,
+                        FatherCommentID     INT     NOT NULL,
                         PublishTime         TEXT    NOT NULL,
                         FOREIGN KEY (AuthorID) REFERENCES Users (UserID),
                         FOREIGN KEY (FatherCommentID) REFERENCES FanArtComment (CommentID) 
