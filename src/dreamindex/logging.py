@@ -3,14 +3,13 @@ import sys
 from datetime import datetime
 from os.path import dirname
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)7s | %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s | %(message)s')
 root_logger = logging.getLogger("DreamIndex")
 root_logger.setLevel(logging.DEBUG)
 _handlers = (
     logging.FileHandler(
         dirname(__file__)+f"/logs/dreamindex_log_{datetime.now().strftime('%Y%m%d-%H%M%S')}.log"
-    ),
-    # logging.StreamHandler(sys.stdout)
+    )
 )
 
 
