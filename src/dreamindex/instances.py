@@ -19,8 +19,9 @@ class Base:
 
 
 @logged
-class User:
+class User(Base):
     def __init__(self, user_name, user_id):
+        super().__init__()
         self.name = user_name
         self.user_id = user_id
         self.avatar = f'{dirname(__file__)}/static/img/avatars/{user_id}.png'
@@ -31,8 +32,9 @@ class User:
 
 
 @logged
-class Article:
+class Article(Base):
     def __init__(self, id_, title, content, views=0, likes=0, comments=()):
+        super().__init__()
         self.id = id_
         self.title = title
         self.content = content
@@ -69,14 +71,15 @@ class FanArt(Article):
 
 
 @logged
-class Character:
+class Character(Base):
     def __init__(self, character_name, character_description):
+        super().__init__()
         self.name = character_name
         self.description = character_description
 
 
 @logged
-class Comment:
+class Comment(Base):
     def __init__(self, id_: int, author: User, content: str, publish_time: str, secondary_comments=()):
         """
         Creates a comment instance
@@ -85,6 +88,7 @@ class Comment:
         :param content: Comment content
         :param secondary_comments: A list containing Comment instances
         """
+        super().__init__()
         self.id = id_
         self.author = author
         self.content = content

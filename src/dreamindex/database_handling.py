@@ -41,7 +41,16 @@ class Database:
             comments = self.get_comments('dream', dream_id)
             author = self.get_user(user_id=author_id)
             fan_arts = self.get_fan_arts(condition=f'FatherDreamID={dream_id}')
-            dreams.append(Dream(title, content, author, views, likes, comments, fan_arts))
+            dreams.append(Dream(
+                id_=dream_id,
+                title=title,
+                content=content,
+                author=author,
+                views=views,
+                likes=likes,
+                comments=comments,
+                fan_arts=fan_arts
+            ))
         return dreams
 
     def get_comments(self, article_type, id_, count=None):
