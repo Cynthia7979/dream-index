@@ -1,6 +1,14 @@
+# Other specifically hidden files
 *.hide
+
+# Unecessary
+src/dreamindex.egg-info
+src/dreamindex/logs/
 .idea/
 src/__pycache__/
 *.pyc
-src/dreamindex.egg-info
-src/dreamindex/logs/
+
+# Privacy
+src/dreamindex/databases/*
+!src/dreamindex/databases/test_database.db
+!src/dreamindex/databases/test_database.db-journal
