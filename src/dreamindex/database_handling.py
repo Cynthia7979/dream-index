@@ -116,10 +116,11 @@ class Database:
         assert user_id or user_name, 'You must pass EITHER username or user ID.'
         user = User(*(self._perform_query(
             table='User',
-            sort='UserName',
             condition=f'UserID={user_id}' if user_id else f'UserName={user_name}',
             count=1
-        )[0]))  # Gets the first (and only) user in the result and maps it to all args
+        )[0][::-1]))
+        # Gets the first (and only) user in the result and maps it to all args (reversed because for some reason it
+        # returns UserName first and then UserID
         return user
 
     def _perform_query(self, table, columns='*', condition='', sort='', order='desc', count=None):

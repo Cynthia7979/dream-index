@@ -26,10 +26,6 @@ class User(Base):
         self.user_id = user_id
         self.avatar = f'{dirname(__file__)}/static/img/avatars/{user_id}.png'
 
-    def __repr__(self):
-        return f"""User instance with
-"""
-
 
 @logged
 class Article(Base):
