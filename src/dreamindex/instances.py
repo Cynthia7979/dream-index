@@ -12,10 +12,10 @@ class Base:
         pass
 
     def __repr__(self):
-        repr_string = f'{self.__class__.__name__} instance with '
+        repr_string = f'<{self.__class__.__name__} instance with '
         for attribute in self.__dict__:
             repr_string += f'{attribute}={self.__getattribute__(attribute)}, '
-        return repr_string.rstrip(', ')
+        return repr_string.rstrip(', ')+'>'
 
 
 @logged
