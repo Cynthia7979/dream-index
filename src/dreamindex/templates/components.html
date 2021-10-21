@@ -11,3 +11,12 @@ and can be called using
 
 -Refer to https://stackoverflow.com/questions/15106741/parameterized-reusable-blocks-with-jinja2-flask-templating-engine
 -->
+
+{% macro topBar() -%}
+    <img src="/static/logo.png" alt="logo" />
+    <a href="/rand/dream">随机梦境</a>
+    <a href="/rand/fanart">随机二创</a>
+    {{ searchBar() }} <!-- TODO -->
+    <a href="/new/dream">创建梦境</a>
+    {{ userIcon(userId) }} <!-- TODO -->
+{$- endmacro %}
