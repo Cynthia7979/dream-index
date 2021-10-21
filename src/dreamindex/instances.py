@@ -7,12 +7,27 @@ from dreamindex.logging import logged, get_file_logger
 from os.path import dirname
 
 
+class Base:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __repr__(self):
+        repr_string = f'{self.__class__.__name__} instance with '
+        for attribute in self.__dict__:
+            repr_string += f'{attribute}={self.__getattribute__(attribute)}, '
+        return repr_string.rstrip(', ')
+
+
 @logged
 class User:
     def __init__(self, user_name, user_id):
         self.name = user_name
         self.user_id = user_id
         self.avatar = f'{dirname(__file__)}/static/img/avatars/{user_id}.png'
+
+    def __repr__(self):
+        return f"""User instance with
+"""
 
 
 @logged
