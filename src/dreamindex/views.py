@@ -12,8 +12,8 @@ def home_page():
     home_page_displays = {
         "dream_trending": db.get_dreams(sort="NumberOfLikes", count=4),
         "dream_new": db.get_dreams(sort="PublishTime", count=4),
-        "fanart_trending": db.get_fanarts(sort="NumberOfLikes", count=4),
-        "fanart_new": db.get_fanarts(sort="PublishTime", count=4)
+        "fanart_trending": db.get_fan_arts(sort="NumberOfLikes", count=4),
+        "fanart_new": db.get_fan_arts(sort="PublishTime", count=4)
     }
 
     return render_template('home_page.html', home_page_displays=home_page_displays)

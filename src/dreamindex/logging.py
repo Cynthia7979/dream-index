@@ -9,7 +9,7 @@ root_logger.setLevel(logging.DEBUG)
 _handlers = (
     logging.FileHandler(
         dirname(__file__)+f"/logs/dreamindex_log_{datetime.now().strftime('%Y%m%d-%H%M%S')}.log"
-    )
+    ),
 )
 
 

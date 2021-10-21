@@ -39,21 +39,25 @@ class Database:
         for row in result:
             dream_id, title, author_id, publish_time, content, likes, num_comments, views = row
             comments = self.get_comments('dream', dream_id)
-            author = self.get_user(id_=author_id)
-            fan_arts = self.get_fan_arts(father_dream_id=dream_id)
+            author = self.get_user(user_id=author_id)
+            fan_arts = self.get_fan_arts(condition=f'FatherDreamID={dream_id}')
             dreams.append(Dream(title, content, author, views, likes, comments, fan_arts))
+        return dreams
 
-    def get_comments(self, article_type, id_):
+    def get_comments(self, article_type, id_, count=None):
         """
         Retrieves the comments for an article
         :param article_type: String. Either 'dream' or 'fanart'
         :param id_: The article's ID
+        :param count: Number of comments to get (excluding secondary ones)
         :return: A list containing Comment instances
         """
         article_type = 'Dream' if article_type == 'dream' else 'FanArt'
         result = self._perform_query(
             table=f'{article_type}Comment',
-            condition=f'Father{article_type}ID={id_}'
+            sort='PublishTime',
+            condition=f'Father{article_type}ID={id_}',
+            count=count
         )
         comments = []
         for comment_row in result:
@@ -61,26 +65,70 @@ class Database:
             secondary_comments = []
             sec_com_result = self._perform_query(
                 table=f'Secondary{article_type}Comment',
+                sort='PublishTime',
                 condition=f'FatherCommentID={comment_row[0]}'
             )
             for sec_com_row in sec_com_result:
                 sec_comment_id, sec_author_id, sec_comment_content, _, sec_publish_time = sec_com_row
                 secondary_comments.append(Comment(
-                    sec_comment_id, self.get_user(sec_author_id), sec_comment_content, sec_publish_time
+                    sec_comment_id, self.get_user(user_id=sec_author_id), sec_comment_content, sec_publish_time
                 ))
             comments.append(Comment(
-                comment_id, self.get_user(author_id), comment_content, publish_time,
+                comment_id, self.get_user(user_id=author_id), comment_content, publish_time,
                 secondary_comments=secondary_comments
             ))
         return comments
 
-    def get_fan_arts(self):
-        pass
+    def get_fan_arts(self, sort='PublishTime', order='desc', condition="", count=1, card=False):
+        result = self._perform_query(
+            table='FanArt',
+            sort=sort,
+            order=order,
+            condition=condition,
+            count=count
+        )
+        fan_arts = []
+        for fan_art_row in result:
+            fan_art_id, fan_art_title, father_dream_id, author_id, publish_time, fan_art_content, \
+                number_of_likes, number_of_comments, number_of_views = fan_art_row
+            if card:  # FIXME: This seems unnecessary. Maybe use FanArt only?
+                fan_arts.append(FanArtCard(
+                    id_=fan_art_id,
+                    title=fan_art_title,
+                    content=fan_art_content,
+                    father_dream_id=father_dream_id,
+                    father_dream_title=self.get_dreams(condition=f'DreamID={father_dream_id}', count=1)[0].title,
+                    views=number_of_views,
+                    likes=number_of_likes,
+                    comments=self.get_comments('fanart', fan_art_id)
+                ))
+            else:
+                fan_arts.append(FanArt(
+                    id_=fan_art_id,
+                    title=fan_art_title,
+                    content=fan_art_content,
+                    father_dream=self.get_dreams(condition=f'DreamID={father_dream_id}'),
+                    author=self.get_user(user_id=author_id),
+                    views=number_of_views,
+                    likes=number_of_likes,
+                    comments=self.get_comments('fanart', fan_art_id)
+                ))
+        return fan_arts
 
-    def _perform_query(self, table, columns='*', condition='', sort='PublishTime', order='desc', count=None):
+    def get_user(self, user_id=None, user_name=None):
+        assert user_id or user_name, 'You must pass EITHER username or user ID.'
+        user = User(*(self._perform_query(
+            table='User',
+            sort='UserName',
+            condition=f'UserID={user_id}' if user_id else f'UserName={user_name}',
+            count=1
+        )[0]))  # Gets the first (and only) user in the result and maps it to all args
+        return user
+
+    def _perform_query(self, table, columns='*', condition='', sort='', order='desc', count=None):
         query_string = f"""SELECT {str(columns) if columns != '*' else '*'} FROM {table}
-                                {'WHERE' + condition if condition else ''}
-                                ORDER BY {sort} {order.upper()}
+                                {'WHERE ' + condition if condition else ''}
+                                {'ORDER BY ' + sort + ' ' + order.upper() if sort else ''}
                                 {'LIMIT '+str(count) if count else ''}
                 ;"""
         self.logger.debug(f"New query: {query_string}")
@@ -132,6 +180,7 @@ class Database:
                         Content             TEXT    NOT NULL,
                         NumberOfLikes       INT     DEFAULT 0,
                         NumberOfComments    INT     DEFAULT 0,
+                        NumberOfViews       INT     DEFAULT 0,
                         FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID),
                         FOREIGN KEY (AuthorID)      REFERENCES User (UserID)
                     );""")
