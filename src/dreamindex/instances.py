@@ -48,7 +48,7 @@ class FanArtCard(Article):
 
 
 @logged
-class DreamFull(DreamCard):
+class Dream(DreamCard):
     def __init__(self, title, content, author: User, views=0, likes=0, comments=(), fan_arts=()):
         super().__init__(title, content, views, likes, comments)
         self.author = author
@@ -57,7 +57,7 @@ class DreamFull(DreamCard):
 
 
 @logged
-class FanArtFull(FanArtCard):
+class FanArt(FanArtCard):
     def __init__(self, title, content, father_dream, author: User, views=0, likes=0, comments=()):
         super().__init__(title, content, '', views, likes, comments)
         self.father_dream = father_dream

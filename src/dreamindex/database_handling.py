@@ -20,6 +20,7 @@ Refer to the following link for additional naming conventions:
 https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions
 """
 from dreamindex.logging import logged, get_file_logger
+from dreamindex.instances import *
 import sqlite3
 import os
 
@@ -31,15 +32,25 @@ class Database:
         self._connet()
         self.logger.info(f"Database instance on {self.database_path} is created.")
 
-    def get_dreams(self, count=1, sort='PublishTime', order='desc', condition=""):
-        self.cur.execute(f"""SELECT * FROM Dream
-                        {'WHERE'+condition if condition else ''}
-                        ORDER BY {sort} {order.upper()}
-                        LIMIT {count}
-                    ;""")
-        result = self.cur.fetchall()
+    def get_dreams(self, sort='PublishTime', order='desc', condition="", count=1):
+        result = self._perform_query(table='Dream', sort=sort, order=order, condition=condition, count=count)
+        dreams = []
         for row in result:
-            print(row)
+            dream_id, title, author_id, publish_time, content, likes, num_comments, views = row
+            comments = self.get_comments(dream_id)
+            author = self.get_user(id_=author_id)
+            fan_arts = self.get_fan_arts(father_dream_id=dream_id)
+            dreams.append(Dream(title, content, author, views, likes, comments, fan_arts))
+
+    def _perform_query(self, table, columns='*', condition='', sort='PublishTime', order='desc', count=None):
+        query_string = f"""SELECT {str(columns) if columns != '*' else '*'} FROM {table}
+                                {'WHERE' + condition if condition else ''}
+                                ORDER BY {sort} {order.upper()}
+                                {'LIMIT '+str(count) if count else ''}
+                ;"""
+        self.logger.debug(f"New query: {query_string}")
+        self.cur.execute(query_string)
+        return self.cur.fetchall()
 
     def _connet(self):
         self.conn = sqlite3.connect(self.database_path)

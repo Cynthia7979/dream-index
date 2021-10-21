@@ -10,11 +10,12 @@ from flask import render_template
 @app.route('/')
 def home_page():
     home_page_displays = {
-        "dream_trending": db.get_dreams(),
-        "dream_new": db.get_dreams(),
-        "fanart_trending": db.get_fanarts(),
-        "fanart_new": db.get_fanarts()
+        "dream_trending": db.get_dreams(sort="NumberOfLikes", count=4),
+        "dream_new": db.get_dreams(sort="PublishTime", count=4),
+        "fanart_trending": db.get_fanarts(sort="NumberOfLikes", count=4),
+        "fanart_new": db.get_fanarts(sort="PublishTime", count=4)
     }
+
     return render_template('home_page.html', home_page_displays=home_page_displays)
 
 
