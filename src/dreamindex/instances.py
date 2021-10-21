@@ -36,21 +36,7 @@ class Article:
 
 
 @logged
-class DreamCard(Article):
-    def __init__(self, id_, title, content, views=0, likes=0, comments=(), num_fan_arts=0):
-        super().__init__(id_, title, content, views, likes, comments)
-        self.num_fan_arts = num_fan_arts
-
-
-@logged
-class FanArtCard(Article):
-    def __init__(self, id_, title, content, father_dream_id, father_dream_title, views=0, likes=0, comments=()):
-        super().__init__(id_, title, content, views, likes, comments)
-        self.father_dream = DreamCard(id_=father_dream_id, title=father_dream_title, content='')
-
-
-@logged
-class Dream(DreamCard):
+class Dream(Article):
     def __init__(self, id_, title, content, author: User, views=0, likes=0, comments=(), fan_arts=(), characters=()):
         super().__init__(id_, title, content, views, likes, comments)
         self.author = author
@@ -60,9 +46,9 @@ class Dream(DreamCard):
 
 
 @logged
-class FanArt(FanArtCard):
+class FanArt(Article):
     def __init__(self, id_, title, content, father_dream, author: User, views=0, likes=0, comments=()):
-        super().__init__(id_, title, content, '', views, likes, comments)
+        super().__init__(id_, title, content, views, likes, comments)
         self.father_dream = father_dream
         self.author = author
 
