@@ -29,6 +29,7 @@ import os
 class Database:
     def __init__(self, database_path):
         self.database_path = database_path
+        self.write_lock = False  # TODO: Finish this lock when needed
         self._connet()
         self.logger.info(f"Database instance on {self.database_path} is created.")
 
@@ -37,10 +38,44 @@ class Database:
         dreams = []
         for row in result:
             dream_id, title, author_id, publish_time, content, likes, num_comments, views = row
-            comments = self.get_comments(dream_id)
+            comments = self.get_comments('dream', dream_id)
             author = self.get_user(id_=author_id)
             fan_arts = self.get_fan_arts(father_dream_id=dream_id)
             dreams.append(Dream(title, content, author, views, likes, comments, fan_arts))
+
+    def get_comments(self, article_type, id_):
+        """
+        Retrieves the comments for an article
+        :param article_type: String. Either 'dream' or 'fanart'
+        :param id_: The article's ID
+        :return: A list containing Comment instances
+        """
+        article_type = 'Dream' if article_type == 'dream' else 'FanArt'
+        result = self._perform_query(
+            table=f'{article_type}Comment',
+            condition=f'Father{article_type}ID={id_}'
+        )
+        comments = []
+        for comment_row in result:
+            comment_id, author_id, comment_content, _father_dream_id, publish_time = comment_row
+            secondary_comments = []
+            sec_com_result = self._perform_query(
+                table=f'Secondary{article_type}Comment',
+                condition=f'FatherCommentID={comment_row[0]}'
+            )
+            for sec_com_row in sec_com_result:
+                sec_comment_id, sec_author_id, sec_comment_content, _, sec_publish_time = sec_com_row
+                secondary_comments.append(Comment(
+                    sec_comment_id, self.get_user(sec_author_id), sec_comment_content, sec_publish_time
+                ))
+            comments.append(Comment(
+                comment_id, self.get_user(author_id), comment_content, publish_time,
+                secondary_comments=secondary_comments
+            ))
+        return comments
+
+    def get_fan_arts(self):
+        pass
 
     def _perform_query(self, table, columns='*', condition='', sort='PublishTime', order='desc', count=None):
         query_string = f"""SELECT {str(columns) if columns != '*' else '*'} FROM {table}
@@ -53,7 +88,7 @@ class Database:
         return self.cur.fetchall()
 
     def _connet(self):
-        self.conn = sqlite3.connect(self.database_path)
+        self.conn = sqlite3.connect(self.database_path, check_same_thread=False)
         self.cur = self.conn.cursor()
         self.cur.execute("""PRAGMA foreign_keys = ON;""")
 

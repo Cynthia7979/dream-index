@@ -33,7 +33,7 @@
 
 CMD，在`src`目录下：
 ```batch
-set FLASK_APP=src/dreamindex
+set FLASK_APP=dreamindex
 set FLASK_ENV=development
 pip install -e .
 python -m flask run
@@ -41,7 +41,7 @@ python -m flask run
 
 Bash，在`src`目录下：
 ```shell script
-export FLASK_APP=src/dreamindex
+export FLASK_APP=dreamindex
 export FLASK_ENV=development
 pip install -e .
 python -m flask run
