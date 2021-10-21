@@ -2,7 +2,7 @@ from dreamindex import database_handling, db  # To change database location, edi
 
 db.setup()
 # The following is for filling information into test database.
-db.cur.execute("""
+db.cur.executemany("""
 INSERT INTO User VALUES (1, "Number One User");
 INSERT INTO Dream VALUES (1, "Number One Dream", 1, "2021-10-20 13:25:12.929", "Content", 0, 0, 0);
 INSERT INTO Dream VALUES (2, "Number Two Dream", 1, "2021-10-20 13:25:13.929", "Content", 0, 0, 0);
