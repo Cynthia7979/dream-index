@@ -244,7 +244,7 @@ class Database:
                         Content             TEXT    NOT NULL,
                         FatherCommentID     INT     NOT NULL,
                         PublishTime         TEXT    NOT NULL,
-                        FOREIGN KEY (AuthorID) REFERENCES Users (UserID),
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
                         FOREIGN KEY (FatherCommentID) REFERENCES FanArtComment (CommentID) 
                     );""")
 
