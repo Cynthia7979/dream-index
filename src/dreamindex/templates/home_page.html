@@ -3,8 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Dream Index</title>
+    <link href="static/css/global.css" type="text/css" rel="stylesheet"/>
+    <link href="static/css/homepage.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-{{ home_page_displays }}
+    {% import 'components.html' as components %}
+    <div id="base" class="">
+    <!-- Title (Rectangle) -->
+    <div id="u0" class="ax_default box_1" data-label="Title">
+        
+        <div id="u0_text" class="text ">
+          <p style="font-size:55px;"><span>the</span><span style="font-size:109px;"> Dream Index</span></p>
+        </div>
+    </div>
+    {{ components.pallete() }}
+<!--{{ home_page_displays }}
+    {'dream_trending': 
+        [<Dream instance with 
+            id=1, 
+            title=Number One Dream, 
+            content=Content, 
+            views=0, 
+            likes=0, 
+            comments=[], 
+            author=<User instance with 
+                name=Number One User, 
+                user_id=1, 
+                avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, 
+            num_fan_arts=0, 
+            fan_arts=[], 
+            characters=[]>, 
+        <Dream instance with 
+            id=2, 
+            title=Number Two Dream, 
+            content=Content, 
+            views=0, likes=0, 
+            comments=[], 
+            author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+        <Dream instance with 
+            id=3, title=Number Three Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+        <Dream instance with 
+            id=4, title=Number Four Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>], 
+    'dream_new': 
+        [<Dream instance with 
+            id=5, title=Number Five Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+        <Dream instance with 
+            id=4, title=Number Four Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+        <Dream instance with 
+            id=3, title=Number Three Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+        <Dream instance with 
+            id=2, title=Number Two Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>], 
+    'fanart_trending': [], 'fanart_new': []
+    }
+-->
+<div id="u325" class="ax_default shape">
+    <div id="u325_div" class=""></div>
+    <div id="u325_text" class="text ">
+      <p><span>Dream Index 2021</span></p>
+    </div>
+  </div>
+    </div>
 </body>
 </html>
