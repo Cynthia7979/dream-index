@@ -8,7 +8,9 @@
 </head>
 <body>
     {% import 'components.html' as components %}
-    <div id="base" class="">
+
+
+    {% set title %}
     <!-- Title (Rectangle) -->
     <div id="u0" class="ax_default box_1" data-label="Title">
         
@@ -16,7 +18,12 @@
           <p style="font-size:55px;"><span>the</span><span style="font-size:109px;"> Dream Index</span></p>
         </div>
     </div>
-    {{ components.pallete() }}
+    {% endset %}
+
+
+
+
+    
 <!--{{ home_page_displays }}
     {'dream_trending': 
         [<Dream instance with 
@@ -56,12 +63,12 @@
     'fanart_trending': [], 'fanart_new': []
     }
 -->
-<div id="u325" class="ax_default shape">
-    <div id="u325_div" class=""></div>
-    <div id="u325_text" class="text ">
-      <p><span>Dream Index 2021</span></p>
-    </div>
-  </div>
+<div id="base" class="">
+    {{ title }}
+    {% for dreams in home_page_displays %}
+      {{ components.pallete(dreams) }}
+    {% end for %}
+    {% include 'footer.html' %}
     </div>
 </body>
 </html>
