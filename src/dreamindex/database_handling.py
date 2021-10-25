@@ -33,14 +33,23 @@ class Database:
         self._connet()
         self.logger.info(f"Database instance on {self.database_path} is created.")
 
-    def get_dreams(self, sort='PublishTime', order='desc', condition="", count=1):
-        result = self._perform_query(table='Dream', sort=sort, order=order, condition=condition, count=count)
+    def get_dreams(self, sort='PublishTime', order='desc', condition="", count=1, exclude_fan_art_id: int = None):
+        result = self._perform_query(
+            table='Dream',
+            sort=sort,
+            order=order,
+            condition=condition,
+            count=count
+        )
         dreams = []
         for row in result:
             dream_id, title, author_id, publish_time, content, likes, num_comments, views = row
             comments = self.get_comments('dream', dream_id)
             author = self.get_user(user_id=author_id)
-            fan_arts = self.get_fan_arts(condition=f'FatherDreamID={dream_id}')
+            if exclude_fan_art_id:
+                fan_arts = self.get_fan_arts(condition=[f'FatherDreamID={dream_id}', f'FanArtID!={exclude_fan_art_id}'])
+            else:
+                fan_arts = self.get_fan_arts(condition=f'FatherDreamID={dream_id}')
             dreams.append(Dream(
                 id_=dream_id,
                 title=title,
@@ -88,12 +97,13 @@ class Database:
             ))
         return comments
 
-    def get_fan_arts(self, sort='PublishTime', order='desc', condition="", count=1, card=False):
+    def get_fan_arts(self, sort='PublishTime', order='desc', condition: (str, tuple, list) = ('',),
+                     count=1, exclude_dream_id=None):
         result = self._perform_query(
             table='FanArt',
             sort=sort,
             order=order,
-            condition=condition,
+            condition=format_condition(condition),
             count=count
         )
         fan_arts = []
@@ -104,7 +114,7 @@ class Database:
                 id_=fan_art_id,
                 title=fan_art_title,
                 content=fan_art_content,
-                father_dream=self.get_dreams(condition=f'DreamID={father_dream_id}'),
+                father_dream=self.get_dreams(condition=f'DreamID={father_dream_id}')[0],
                 author=self.get_user(user_id=author_id),
                 views=number_of_views,
                 likes=number_of_likes,
@@ -124,6 +134,7 @@ class Database:
         return user
 
     def _perform_query(self, table, columns='*', condition='', sort='', order='desc', count=None):
+        condition = format_condition(condition)
         query_string = f"""SELECT {str(columns) if columns != '*' else '*'} FROM {table}
                                 {'WHERE ' + condition if condition else ''}
                                 {'ORDER BY ' + sort + ' ' + order.upper() if sort else ''}
@@ -253,3 +264,10 @@ class Database:
             self.logger.error(f'An unexpected error occurred: {str(e)}, setup process is interrupted. ')
             self.logger.info('Tip: If you want to overwrite the database, use setup(True).')
         self.logger.info('Database setup completed.')
+
+
+def format_condition(condition: (str, list, tuple)):
+    if isinstance(condition, list) or isinstance(condition, tuple):
+        return ' AND '.join(condition)
+    else:
+        return condition
