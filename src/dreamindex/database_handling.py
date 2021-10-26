@@ -46,10 +46,11 @@ class Database:
             dream_id, title, author_id, publish_time, content, likes, num_comments, views = row
             comments = self.get_comments('dream', dream_id)
             author = self.get_user(user_id=author_id)
-            if exclude_fan_art_id:
-                fan_arts = self.get_fan_arts(condition=[f'FatherDreamID={dream_id}', f'FanArtID!={exclude_fan_art_id}'])
-            else:
-                fan_arts = self.get_fan_arts(condition=f'FatherDreamID={dream_id}')
+            fan_art_ids = self._perform_query(
+                table='FanArt',
+                columns='FanArtID',
+                condition=f'FatherDreamID={dream_id}'
+            )
             dreams.append(Dream(
                 id_=dream_id,
                 title=title,
@@ -58,7 +59,7 @@ class Database:
                 views=views,
                 likes=likes,
                 comments=comments,
-                fan_arts=fan_arts
+                fan_art_ids=fan_art_ids
             ))
         return dreams
 
@@ -98,7 +99,7 @@ class Database:
         return comments
 
     def get_fan_arts(self, sort='PublishTime', order='desc', condition: (str, tuple, list) = ('',),
-                     count=1, exclude_dream_id=None):
+                     count=1):
         result = self._perform_query(
             table='FanArt',
             sort=sort,
@@ -114,7 +115,7 @@ class Database:
                 id_=fan_art_id,
                 title=fan_art_title,
                 content=fan_art_content,
-                father_dream=self.get_dreams(condition=f'DreamID={father_dream_id}')[0],
+                father_dream_id=father_dream_id,
                 author=self.get_user(user_id=author_id),
                 views=number_of_views,
                 likes=number_of_likes,

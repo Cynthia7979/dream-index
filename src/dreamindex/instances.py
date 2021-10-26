@@ -50,19 +50,19 @@ class Article(Base):
 
 @logged
 class Dream(Article):
-    def __init__(self, id_, title, content, author: User, views=0, likes=0, comments=(), fan_arts=(), characters=()):
+    def __init__(self, id_, title, content, author: User, views=0, likes=0, comments=(), fan_art_ids=(), characters=()):
         super().__init__(id_, title, content, views, likes, comments)
         self.author = author
-        self.num_fan_arts = len(fan_arts)
-        self.fan_arts = list(fan_arts)
+        self.num_fan_arts = len(fan_art_ids)
+        self.fan_art_ids = list(fan_art_ids)
         self.characters = list(characters)
 
 
 @logged
 class FanArt(Article):
-    def __init__(self, id_, title, content, father_dream, author: User, views=0, likes=0, comments=()):
+    def __init__(self, id_, title, content, father_dream_id, author: User, views=0, likes=0, comments=()):
         super().__init__(id_, title, content, views, likes, comments)
-        self.father_dream = father_dream
+        self.father_dream_id = father_dream_id
         self.author = author
 
 
@@ -98,15 +98,15 @@ class Comment(Base):
 
 @logged
 class DreamComment(Comment):
-    def __init__(self, id_, author: User, content, father_dream: Dream, publish_time: str):
+    def __init__(self, id_, author: User, content, father_dream_id: int, publish_time: str):
         super().__init__(id_, author, content, publish_time)
         self.article_type = 'dream'
-        self.father_dream = father_dream
+        self.father_dream_id = father_dream_id
 
 
 @logged
 class FanArtComment(Comment):
-    def __init__(self, id_, author: User, content, father_fan_art: FanArt, publish_time: str):
+    def __init__(self, id_, author: User, content, father_fan_art_id: int, publish_time: str):
         super().__init__(id_, author, content, publish_time)
         self.article_type = 'fanart'
-        self.father_fan_art = father_fan_art
+        self.father_fan_art_id = father_fan_art_id
