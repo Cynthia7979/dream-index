@@ -246,6 +246,12 @@ class Database:
         # returns UserName first and then UserID
         return user
 
+    def dream_exists(self, dream_id):
+        return self._exists('Dream', f'DreamID={dream_id}')
+
+    def fan_art_exists(self, fan_art_id):
+        return self._exists('FanArt', f'FanArtID={fan_art_id}')
+
     def _exists(self, table, condition):
         self.cur.execute(f"""SELECT EXISTS(SELECT 1 FROM {table} WHERE {condition});""")
         return bool(self.cur.fetchall())

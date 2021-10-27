@@ -4,7 +4,7 @@ Sets up all routings of the application.
 """
 
 from dreamindex import app, db
-from flask import render_template
+from flask import render_template, redirect, abort, url_for
 
 
 @app.route('/')
@@ -21,12 +21,14 @@ def home_page():
 
 @app.route('/rand/dream/')
 def random_dream():
-    return '<p>Hello, World!</p>'
+    random_dream_id = db.get_dreams(sort="RANDOM()", count=1)[0].id
+    redirect(url_for(f'/dream/{random_dream_id}'))
 
 
 @app.route('/rand/fan-art/')
 def random_fan_art():
-    return '<p>Hello, World!</p>'
+    random_fan_art_id = db.get_fan_arts(sort="RANDOM()", count=1)[0].id
+    redirect(url_for(f'/dream/{random_fan_art_id}'))
 
 
 @app.route('/new/dream/')
@@ -42,9 +44,15 @@ def create_fan_art(dream_id):
 
 @app.route('/dream/<int:dream_id>')
 def read_dream(dream_id):
-    return '<p>Hello, World!</p>'
+    if db.dream_exists(dream_id):
+        return render_template('read_dream.html')  # TODO
+    else:
+        abort(404)
 
 
 @app.route('/fan-art/<int:fan_art_id>')
 def read_fan_art(fan_art_id):
-    return '<p>Hello, World!</p>'
+    if db.fan_art_exists(fan_art_id):
+        return render_template('read_fan_art.html')  # TODO
+    else:
+        abort(404)
