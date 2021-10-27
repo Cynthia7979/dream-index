@@ -246,6 +246,10 @@ class Database:
         # returns UserName first and then UserID
         return user
 
+    def _exists(self, table, condition):
+        self.cur.execute(f"""SELECT EXISTS(SELECT 1 FROM {table} WHERE {condition});""")
+        return bool(self.cur.fetchall())
+
     def _perform_query(self, table, columns='*', condition='', sort='', order='desc', count=None):
         condition = format_condition(condition)
         query_string = f"""SELECT {str(columns) if columns != '*' else '*'} FROM {table}
