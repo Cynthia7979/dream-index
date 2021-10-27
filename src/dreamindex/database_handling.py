@@ -33,6 +33,118 @@ class Database:
         self._connet()
         self.logger.info(f"Database instance on {self.database_path} is created.")
 
+    def setup(self, overwrite=False):
+        """
+        Creates necessary tables.
+        :param overwrite: Create a completely new database.
+        :return: None
+        """
+        if overwrite and input(f"Are you sure you want to overwrite the database ({self.database_path})? y/N ").lower() == 'y':
+            self.logger.warning(f"Overwriting database!")
+            self._disconnect()
+            open(self.database_path, 'w')
+            self._connet()
+        try:
+            self.logger.debug('Creating tables: Dream and FanArt tables')
+            # Notes:
+            #   NumberOfComments needs to be manually incremented every time a new comment is created
+            #   Content is raw HTML
+            self.cur.execute("""CREATE TABLE Dream (
+                        DreamID             INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Title               TEXT    NOT NULL,
+                        AuthorID            INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        NumberOfLikes       INT     DEFAULT 0,
+                        NumberOfComments    INT     DEFAULT 0,
+                        NumberOfViews       INT     DEFAULT 0,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID)
+                    );""")
+            self.cur.execute("""CREATE TABLE FanArt (
+                        FanArtID            INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Title               TEXT    NOT NULL,
+                        FatherDreamID       INT     NOT NULL,
+                        AuthorID            INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        NumberOfLikes       INT     DEFAULT 0,
+                        NumberOfComments    INT     DEFAULT 0,
+                        NumberOfViews       INT     DEFAULT 0,
+                        FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID),
+                        FOREIGN KEY (AuthorID)      REFERENCES User (UserID)
+                    );""")
+
+            self.logger.debug('Creating tables: User table')
+            self.conn.execute("""CREATE TABLE User (
+                        UserID              INTEGER PRIMARY KEY AUTOINCREMENT,
+                        UserName            TEXT    NOT NULL
+                    );""")
+            # User avatar should be stored with filename UserID.
+
+            self.logger.debug('Creating tables: Character table')
+            self.cur.execute("""CREATE TABLE Character (
+                        CharacterID         INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Name                TEXT    NOT NULL,
+                        Description         TEXT    NOT NULL,
+                        AuthorID            INT     NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID)
+                    );""")
+
+            self.logger.debug('Creating tables: Dream-Character junction table')
+            # Create junction tables for dream-character and author-character relationships
+            self.cur.execute("""CREATE TABLE DreamCharacterJoin (
+                        DreamID             INT     NOT NULL,
+                        CharacterID         INT     NOT NULL,
+                        FOREIGN KEY (DreamID)       REFERENCES Dream (DreamID),
+                        FOREIGN KEY (CharacterID)   REFERENCES Character (CharacterID)
+                        CONSTRAINT pk_DreamCharacterJoin PRIMARY KEY (DreamID, CharacterID)
+                    );""")
+
+            self.logger.debug('Creating tables: Comment tables')
+            # Create junction tables for comments and secondary comments (replies)
+            self.cur.execute("""CREATE TABLE DreamComment (
+                        CommentID           INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT     NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        FatherDreamID       INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID)
+                    );""")
+            self.cur.execute("""CREATE TABLE SecondaryDreamComment (
+                        SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT     NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        FatherCommentID     INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherCommentID) REFERENCES DreamComment (CommentID)
+                    );""")
+            self.cur.execute("""CREATE TABLE FanArtComment (
+                        CommentID           INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT     NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        FatherFanArtID      INT     NOT NULL,
+                        PublishTime T       EXT     NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherFanArtID) REFERENCES FanArt (FanArtID)
+                    );""")
+            self.cur.execute("""CREATE TABLE SecondaryFanArtComment (
+                        SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
+                        AuthorID            INT     NOT NULL,
+                        Content             TEXT    NOT NULL,
+                        FatherCommentID     INT     NOT NULL,
+                        PublishTime         TEXT    NOT NULL,
+                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
+                        FOREIGN KEY (FatherCommentID) REFERENCES FanArtComment (CommentID) 
+                    );""")
+
+            self.conn.commit()
+        except sqlite3.OperationalError as e:
+            self.logger.error(f'An unexpected error occurred: {str(e)}, setup process is interrupted. ')
+            self.logger.info('Tip: If you want to overwrite the database, use setup(True).')
+        self.logger.info('Database setup completed.')
+
     def get_dreams(self, sort='PublishTime', order='desc', condition="", count=1, exclude_fan_art_id: int = None):
         result = self._perform_query(
             table='Dream',
@@ -154,117 +266,6 @@ class Database:
         self.conn.commit()
         self.conn.close()
 
-    def setup(self, overwrite=False):
-        """
-        Creates necessary tables.
-        :param overwrite: Create a completely new database.
-        :return: None
-        """
-        if overwrite and input(f"Are you sure you want to overwrite the database ({self.database_path})? y/N ").lower() == 'y':
-            self.logger.warning(f"Overwriting database!")
-            self._disconnect()
-            open(self.database_path, 'w')
-            self._connet()
-        try:
-            self.logger.debug('Creating tables: Dream and FanArt tables')
-            # Notes:
-            #   NumberOfComments needs to be manually incremented every time a new comment is created
-            #   Content is raw HTML
-            self.cur.execute("""CREATE TABLE Dream (
-                        DreamID             INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Title               TEXT    NOT NULL,
-                        AuthorID            INT     NOT NULL,
-                        PublishTime         TEXT    NOT NULL,
-                        Content             TEXT    NOT NULL,
-                        NumberOfLikes       INT     DEFAULT 0,
-                        NumberOfComments    INT     DEFAULT 0,
-                        NumberOfViews       INT     DEFAULT 0,
-                        FOREIGN KEY (AuthorID) REFERENCES User (UserID)
-                    );""")
-            self.cur.execute("""CREATE TABLE FanArt (
-                        FanArtID            INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Title               TEXT    NOT NULL,
-                        FatherDreamID       INT     NOT NULL,
-                        AuthorID            INT     NOT NULL,
-                        PublishTime         TEXT    NOT NULL,
-                        Content             TEXT    NOT NULL,
-                        NumberOfLikes       INT     DEFAULT 0,
-                        NumberOfComments    INT     DEFAULT 0,
-                        NumberOfViews       INT     DEFAULT 0,
-                        FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID),
-                        FOREIGN KEY (AuthorID)      REFERENCES User (UserID)
-                    );""")
-
-            self.logger.debug('Creating tables: User table')
-            self.conn.execute("""CREATE TABLE User (
-                        UserID              INTEGER PRIMARY KEY AUTOINCREMENT,
-                        UserName            TEXT    NOT NULL
-                    );""")
-            # User avatar should be stored with filename UserID.
-
-            self.logger.debug('Creating tables: Character table')
-            self.cur.execute("""CREATE TABLE Character (
-                        CharacterID         INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Name                TEXT    NOT NULL,
-                        Description         TEXT    NOT NULL,
-                        AuthorID            INT     NOT NULL,
-                        FOREIGN KEY (AuthorID) REFERENCES User (UserID)
-                    );""")
-
-            self.logger.debug('Creating tables: Dream-Character junction table')
-            # Create junction tables for dream-character and author-character relationships
-            self.cur.execute("""CREATE TABLE DreamCharacterJoin (
-                        DreamID             INT     NOT NULL,
-                        CharacterID         INT     NOT NULL,
-                        FOREIGN KEY (DreamID)       REFERENCES Dream (DreamID),
-                        FOREIGN KEY (CharacterID)   REFERENCES Character (CharacterID)
-                        CONSTRAINT pk_DreamCharacterJoin PRIMARY KEY (DreamID, CharacterID)
-                    );""")
-
-            self.logger.debug('Creating tables: Comment tables')
-            # Create junction tables for comments and secondary comments (replies)
-            self.cur.execute("""CREATE TABLE DreamComment (
-                        CommentID           INTEGER PRIMARY KEY AUTOINCREMENT,
-                        AuthorID            INT     NOT NULL,
-                        Content             TEXT    NOT NULL,
-                        FatherDreamID       INT     NOT NULL,
-                        PublishTime         TEXT    NOT NULL,
-                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
-                        FOREIGN KEY (FatherDreamID) REFERENCES Dream (DreamID)
-                    );""")
-            self.cur.execute("""CREATE TABLE SecondaryDreamComment (
-                        SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
-                        AuthorID            INT     NOT NULL,
-                        Content             TEXT    NOT NULL,
-                        FatherCommentID     INT     NOT NULL,
-                        PublishTime         TEXT    NOT NULL,
-                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
-                        FOREIGN KEY (FatherCommentID) REFERENCES DreamComment (CommentID)
-                    );""")
-            self.cur.execute("""CREATE TABLE FanArtComment (
-                        CommentID           INTEGER PRIMARY KEY AUTOINCREMENT,
-                        AuthorID            INT     NOT NULL,
-                        Content             TEXT    NOT NULL,
-                        FatherFanArtID      INT     NOT NULL,
-                        PublishTime T       EXT     NOT NULL,
-                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
-                        FOREIGN KEY (FatherFanArtID) REFERENCES FanArt (FanArtID)
-                    );""")
-            self.cur.execute("""CREATE TABLE SecondaryFanArtComment (
-                        SecondaryCommentID  INTEGER PRIMARY KEY AUTOINCREMENT,
-                        AuthorID            INT     NOT NULL,
-                        Content             TEXT    NOT NULL,
-                        FatherCommentID     INT     NOT NULL,
-                        PublishTime         TEXT    NOT NULL,
-                        FOREIGN KEY (AuthorID) REFERENCES User (UserID),
-                        FOREIGN KEY (FatherCommentID) REFERENCES FanArtComment (CommentID) 
-                    );""")
-
-            self.conn.commit()
-        except sqlite3.OperationalError as e:
-            self.logger.error(f'An unexpected error occurred: {str(e)}, setup process is interrupted. ')
-            self.logger.info('Tip: If you want to overwrite the database, use setup(True).')
-        self.logger.info('Database setup completed.')
 
 
 def format_condition(condition: (str, list, tuple)):
