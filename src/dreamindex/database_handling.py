@@ -145,7 +145,7 @@ class Database:
             self.logger.info('Tip: If you want to overwrite the database, use setup(True).')
         self.logger.info('Database setup completed.')
 
-    def get_dreams(self, sort='PublishTime', order='desc', condition="", count=1, exclude_fan_art_id: int = None):
+    def get_dreams(self, sort='PublishTime', order='desc', condition: (str, tuple, list) = ('',), count=1):
         result = self._perform_query(
             table='Dream',
             sort=sort,
@@ -265,7 +265,6 @@ class Database:
     def _disconnect(self):
         self.conn.commit()
         self.conn.close()
-
 
 
 def format_condition(condition: (str, list, tuple)):
