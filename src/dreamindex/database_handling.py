@@ -216,18 +216,25 @@ class Database:
             table='FanArt',
             sort=sort,
             order=order,
-            condition=format_condition(condition),
+            condition=condition,
             count=count
         )
         fan_arts = []
         for fan_art_row in result:
             fan_art_id, fan_art_title, father_dream_id, author_id, publish_time, fan_art_content, \
                 number_of_likes, number_of_comments, number_of_views = fan_art_row
+            father_dream_author_id = self._perform_query(
+                table='Dream',
+                columns='AuthorID',
+                condition=f'DreamID={father_dream_id}',
+                count=1
+            )[0]
             fan_arts.append(FanArt(
                 id_=fan_art_id,
                 title=fan_art_title,
                 content=fan_art_content,
                 father_dream_id=father_dream_id,
+                father_dream_author=self.get_user(user_id=father_dream_author_id),
                 author=self.get_user(user_id=author_id),
                 views=number_of_views,
                 likes=number_of_likes,
