@@ -21,7 +21,7 @@ and can be called using
     {{ userIcon(userId) }} <!-- TODO -->
 {%- endmacro %}
 
-{% macro pallete(dreams) -%}
+{% macro pallete(dreams,type) -%}
     <!-- TrendA (Group) -->
     <div id="u32" class="ax_default" data-label="TrendA" data-left="40" data-top="316" data-width="955" data-height="434">
 
@@ -29,7 +29,7 @@ and can be called using
         <div id="u33" class="ax_default paragraph">
           <div id="u33_div" class=""></div>
           <div id="u33_text" class="text ">
-            <p><span>精选梦境</span></p>
+            <p><span>{{ type }}</span></p>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ and can be called using
   <div id="u291" class="ax_default paragraph">
     <div id="u291_div" class=""></div>
     <div id="u291_text" class="text ">
-      <p><span>日常二创</span></p>
+      <p><span>{{ dream.title }}</span></p>
     </div>
   </div>
 
@@ -71,7 +71,7 @@ and can be called using
   <div id="u292" class="ax_default paragraph">
     <div id="u292_div" class=""></div>
     <div id="u292_text" class="text ">
-      <p><span>其实也没什么内容，画了就发出来好了，这其实是全文本的示例；其实也没什么内容，画了就发出来好了，这其实是全文本的示例；其实也没什么内容，画了就发出来好了，这其实是全文本的示例；其实也没什么内容，画了就发出来好了，这其实是全文本的示例；其实也没什么内容，画了就发出来好了，这其实是全文本的示例；其实也没...</span></p>
+      <p><span>{{ dream.content }}</span></p>
     </div>
   </div>
 
@@ -93,7 +93,7 @@ and can be called using
       <div id="u296" class="ax_default paragraph">
         <div id="u296_div" class=""></div>
         <div id="u296_text" class="text ">
-          <p><span>999+</span></p>
+          <p><span>{{ dream.views }}</span></p>
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ and can be called using
       <div id="u299" class="ax_default paragraph">
         <div id="u299_div" class=""></div>
         <div id="u299_text" class="text ">
-          <p><span>280</span></p>
+          <p><span>{{ dream.likes }}</span></p>
         </div>
       </div>
     </div>
@@ -133,10 +133,32 @@ and can be called using
       <div id="u302" class="ax_default paragraph">
         <div id="u302_div" class=""></div>
         <div id="u302_text" class="text ">
-          <p><span>100</span></p>
+          <p><span>{{ len(dream.comments) }}</span></p>
         </div>
       </div>
     </div>
+    
+    {% if dream.num_fan_arts -%}
+    <!-- 二创数量 (Group) -->
+    <div id="u297" class="ax_default" data-left="133" data-top="2149" data-width="61" data-height="21">
+
+      <!-- 二创数量 (Shape) -->
+      <div id="u298" class="ax_default icon">
+        <img id="u298_img" class="img " src="images/1_首页/u45.svg"/>
+        <div id="u298_text" class="text " style="display:none; visibility: hidden">
+          <p></p>
+        </div>
+      </div>
+    
+      <!-- Unnamed (Rectangle) -->
+      <div id="u299" class="ax_default paragraph">
+        <div id="u299_div" class=""></div>
+        <div id="u299_text" class="text ">
+          <p><span>{{ dream.num_fan_arts }}</span></p>
+        </div>
+      </div>
+    </div>
+    {%- endif %}
   </div>
 
   <!-- Unnamed (Group) -->
@@ -149,7 +171,7 @@ and can be called using
         <p></p>
       </div>
     </div>
-
+  {% if dream.father_dream_id -%}
     <!-- 原作作者id (Rectangle) -->
     <div id="u305" class="ax_default paragraph">
       <div id="u305_div" class=""></div>
@@ -157,6 +179,7 @@ and can be called using
         <p><span>我永远喜欢...</span></p>
       </div>
     </div>
+  {%- endif %}
   </div>
 </div>
 {%- endmacro %}
