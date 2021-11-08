@@ -228,7 +228,7 @@ class Database:
                 columns='AuthorID',
                 condition=f'DreamID={father_dream_id}',
                 count=1
-            )[0]
+            )[0][0]  # The query returns [(author_id,)]
             fan_arts.append(FanArt(
                 id_=fan_art_id,
                 title=fan_art_title,
@@ -272,7 +272,9 @@ class Database:
                 ;"""
         self.logger.debug(f"New query: {query_string}")
         self.cur.execute(query_string)
-        return self.cur.fetchall()
+        result = self.cur.fetchall()
+        self.logger.debug(f"Query result: {result}")
+        return result
 
     def _connet(self):
         self.conn = sqlite3.connect(self.database_path, check_same_thread=False)
