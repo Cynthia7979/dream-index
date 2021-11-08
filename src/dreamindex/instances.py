@@ -43,6 +43,10 @@ class Article(Base):
     def raw_content(self):
         pass # do something to strip off the html style.
 
+    @property
+    def num_comments(self):
+        return len(self.comments)
+
     def get_summary(self, length=150):
         # TODO: Need to make sure that HTML code doesn't get cut off - an auto-updating raw_text attribute?
         return self.content[:length]
@@ -60,9 +64,10 @@ class Dream(Article):
 
 @logged
 class FanArt(Article):
-    def __init__(self, id_, title, content, father_dream_id, author: User, views=0, likes=0, comments=()):
+    def __init__(self, id_, title, content, father_dream_id, father_dream_author:User, author: User, views=0, likes=0, comments=()):
         super().__init__(id_, title, content, views, likes, comments)
         self.father_dream_id = father_dream_id
+        self.father_dream_author = father_dream_author
         self.author = author
 
 
@@ -90,6 +95,10 @@ class Comment(Base):
         self.content = content
         self._publish_time = publish_time
         self.secondary_comments = list(secondary_comments)
+
+    @property
+    def num_secondary_comments(self):
+        return len(self.secondary_comments)
 
     @property
     def publish_time(self):
