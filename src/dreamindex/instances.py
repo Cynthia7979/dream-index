@@ -37,11 +37,12 @@ class Article(Base):
         self.views = views
         self.likes = likes
         self.comments = list(comments)
+        self.type = 'None'
         self.logger.debug(f'New {self.__class__.__name__} instance created (title={title}).')
 
     @property
     def raw_content(self):
-        pass # do something to strip off the html style.
+        pass # TODO: do something to strip off the html style.
 
     @property
     def num_comments(self):
@@ -60,6 +61,7 @@ class Dream(Article):
         self.num_fan_arts = len(fan_art_ids)
         self.fan_art_ids = list(fan_art_ids)
         self.characters = list(characters)
+        self.type = 'Dream'
 
 
 @logged
@@ -69,6 +71,7 @@ class FanArt(Article):
         self.father_dream_id = father_dream_id
         self.father_dream_author = father_dream_author
         self.author = author
+        self.type = "FanArt"
 
 
 @logged
