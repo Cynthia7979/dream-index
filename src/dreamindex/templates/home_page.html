@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Dream Index</title>
-    <link href="static/css/global.css" type="text/css" rel="stylesheet"/>
-    <link href="static/css/homepage.css" type="text/css" rel="stylesheet"/>
+    <!-- <link href="{{ url_for('static',filename='css/homepage.css') }}" type="text/css" rel="stylesheet"/> -->
+    <link href="{{ url_for('static',filename='css/global.css') }}" type="text/css" rel="stylesheet"/>
 </head>
 <body>
     {% import 'components.html' as components %}
-
 
     {% set title %}
     <!-- Title (Rectangle) -->
