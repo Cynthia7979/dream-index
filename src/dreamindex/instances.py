@@ -38,7 +38,8 @@ class Article(Base):
         self.likes = likes
         self.comments = list(comments)
         self.type = 'None'
-        self.logger.debug(f'New {self.__class__.__name__} instance created (title={title}).')
+        self.default_summary = self.get_summary()
+        self.logger.debug(f'New {self.type} instance created (title={title}).')
 
     @property
     def raw_content(self):
