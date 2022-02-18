@@ -1,0 +1,44 @@
+.homepage-title {
+  font-family: Papyrus, fantasy;
+  font-weight: bold;
+  margin: auto;
+  width: fit-content;
+}
+
+.grid-display {
+  margin-bottom: 40px;
+}
+
+.grid-display-header-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.grid-display-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.display-card {
+  border: solid 1px #797979;
+  border-radius: 8px;
+  margin: 15px 15px 0 15px;
+  padding: 20px;
+  width: 40%;
+}
+
+.display-card-title-text {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.display-card-summary, .display-card-summary p {
+  color: #7F7F7F;
+  font-size: 14px;
+  height: 5em;
+}
+
+.display-card-stats .stat-value {
+  display: inline;
+  margin-right: 10px;
+}

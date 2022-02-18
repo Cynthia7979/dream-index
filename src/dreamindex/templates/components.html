@@ -36,21 +36,22 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
   </div>
 {%- endmacro %}
 
-{% macro gridDisplay(data, title) -%}
-  <div>
+{% macro gridDisplay(data, title, link) -%}
+  <div class="grid-display">
     <div class="grid-display-header">
-      <span>{{ title }}</span><span>|&nbsp; 查看全部</span>
+      <span class="grid-display-header-title">{{ title }}&nbsp;&nbsp;|&nbsp;</span>
+      <a href="{{ link }}" class="grid-display-header-link">查看全部</a>
     </div>
     <div class="grid-display-body">
       {% for individual_data in data %} <!-- Display detail -->
-        {{ displayCard(individual_data) }} <!-- FIXME: Should have two macros for dream and fanarts. 可以封装一下？ -->
+        {{ displayCard(individual_data) }}
       {% endfor %}
     </div>
   </div>
 {%- endmacro %}
 
 {% macro displayCard(item) -%}
-<div id="{{item.type}}-{{item.id_}}" class="display-card">
+<div id="{{item.type}}-{{item.id}}" class="display-card">
   <!-- 标题 -->
   <div class="display-card-title">
 
@@ -58,11 +59,11 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
       <!-- 原作作者id -->
       <div class="display-card-original-author">
         <img class="icon original-author-icon" src="/static/imgs/icons/author.png"/>
-        <span>{{ item.father_dream_author.name }}</span>
+        <span>{{ item.father_dream_author.name | truncate(6) }}</span>
       </div>
     {%- endif %}
 
-    <p>{{ item.title }}</p>
+    <span class="display-card-title-text"> {{ item.title }} </span>
 
   </div>
 
@@ -72,29 +73,29 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
   </div>
 
   <!-- 社区数据 -->
-  <div class="display-card-numbers">
+  <div class="display-card-stats">
 
     <!-- 阅读量 -->
-    <div class="display-card-views">
+    <div class="stat-value display-card-views">
       <img class="icon views-icon" src="/static/imgs/icons/views.png"/>
       <span>{{ item.views }}</span>
     </div>
 
     <!-- 点赞量 -->
-    <div class="display-card-likes">
+    <div class="stat-value display-card-likes">
       <img class="icon likes-icon" src="/static/imgs/icons/likes.png"/>
       <span>{{ item.likes }}</span>
     </div>
 
     <!-- 评论数 -->
-    <div class="display-card-comments">
+    <div class="stat-value display-card-comments">
       <img class="icon comments-icon " src="/static/imgs/icons/comments.png"/>
       <span>{{ item.comments|length }}</span>
     </div>
     
     {% if item.type == "Dream" -%}
     <!-- 二创数 -->
-    <div class="display-card-fanarts">
+    <div class="stat-value display-card-fanarts">
       <img class="icon fanarts-icon" src="/static/imgs/icons/fanarts.png"/>
       <span>{{ item.num_fan_arts }}</span>
     </div>
