@@ -22,53 +22,54 @@
 
 
 
-    
-<!--{{ home_page_displays }}
-    {'dream_trending': 
-        [<Dream instance with 
-            id=1, 
-            title=Number One Dream, 
-            content=Content, 
-            views=0, 
-            likes=0, 
-            comments=[], 
-            author=<User instance with 
-                name=Number One User, 
-                user_id=1, 
-                avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, 
-            num_fan_arts=0, 
-            fan_arts=[], 
-            characters=[]>, 
-        <Dream instance with 
-            id=2, 
-            title=Number Two Dream, 
-            content=Content, 
-            views=0, likes=0, 
-            comments=[], 
-            author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
-        <Dream instance with 
-            id=3, title=Number Three Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
-        <Dream instance with 
-            id=4, title=Number Four Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>], 
-    'dream_new': 
-        [<Dream instance with 
-            id=5, title=Number Five Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
-        <Dream instance with 
-            id=4, title=Number Four Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
-        <Dream instance with 
-            id=3, title=Number Three Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
-        <Dream instance with 
-            id=2, title=Number Two Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>], 
-    'fan_art_trending': [], 'fan_art_new': []
-    }
--->
-<div id="base" class="">
-    {{ title }}
-    {{ components.pallete(home_page_displays['dream_trending'],'精选梦境') }}
-    {{ components.pallete(home_page_displays['dream_new'],'最新梦境') }}
-    {{ components.pallete(home_page_displays['fan_art_trending'],'精选二创') }}
-    {{ components.pallete(home_page_displays['fan_art_new'],'最新二创') }}
-    {% include 'footer.html' %}
+        
+    <!--{{ home_page_displays }}
+        {'dream_trending': 
+            [<Dream instance with 
+                id=1, 
+                title=Number One Dream, 
+                content=Content, 
+                views=0, 
+                likes=0, 
+                comments=[], 
+                author=<User instance with 
+                    name=Number One User, 
+                    user_id=1, 
+                    avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, 
+                num_fan_arts=0, 
+                fan_arts=[], 
+                characters=[]>, 
+            <Dream instance with 
+                id=2, 
+                title=Number Two Dream, 
+                content=Content, 
+                views=0, likes=0, 
+                comments=[], 
+                author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+            <Dream instance with 
+                id=3, title=Number Three Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+            <Dream instance with 
+                id=4, title=Number Four Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>], 
+        'dream_new': 
+            [<Dream instance with 
+                id=5, title=Number Five Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+            <Dream instance with 
+                id=4, title=Number Four Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+            <Dream instance with 
+                id=3, title=Number Three Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>, 
+            <Dream instance with 
+                id=2, title=Number Two Dream, content=Content, views=0, likes=0, comments=[], author=<User instance with name=Number One User, user_id=1, avatar=D:\Code\Projects\Dream Index\flask\dream-index\src\dreamindex/static/img/avatars/1.png>, num_fan_arts=0, fan_arts=[], characters=[]>], 
+        'fan_art_trending': [], 'fan_art_new': []
+        }
+    -->
+    <div id="base" class="">
+        {{ title }}
+        {{ components.pallete(home_page_displays['dream_trending'],'精选梦境') }}
+        {{ components.pallete(home_page_displays['dream_new'],'最新梦境') }}
+        {{ components.pallete(home_page_displays['fan_art_trending'],'精选二创') }}
+        {{ components.pallete(home_page_displays['fan_art_new'],'最新二创') }}
     </div>
+
+    {{ components.footer }}
 </body>
 </html>
