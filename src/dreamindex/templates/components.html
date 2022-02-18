@@ -1,186 +1,107 @@
 <!-- This is the component collection file.
-All components should be written in this file in the following form:
+All components should be written in this file in either of the following styles.
+
+Macro (with arguments):
 
     {% macro newComponent(arg) -%}
       <div class='container'><p>{{arg}}</p></div>
     {%- endmacro %}
 
-and can be called using
+Call with
 
     {{ newComponent('arg value') }}
 
+or Variable (without arguments):
+
+    {% set newComponent %}
+      <div class="container"></div>
+    {% endset %}
+
+Call with
+
+    {{ newComponent }}
+
 -Refer to https://stackoverflow.com/questions/15106741/parameterized-reusable-blocks-with-jinja2-flask-templating-engine
+and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
 -->
 
-{% macro topBar() -%}
+{% macro topBar(userId) -%}
+  <div class="top-bar">
     <img src="/static/logo.png" alt="logo" />
     <a href="/rand/dream">随机梦境</a>
     <a href="/rand/fan-art">随机二创</a>
-    {{ searchBar() }} <!-- TODO -->
+    {{ searchBar }} <!-- TODO -->
     <a href="/new/dream">创建梦境</a>
     {{ userIcon(userId) }} <!-- TODO -->
+  </div>
 {%- endmacro %}
 
-{% macro pallete(dreams,type) -%}
-    <!-- TrendA (Group) -->
-    <div id="u32" class="ax_default" data-label="TrendA" data-left="40" data-top="316" data-width="955" data-height="434">
-
-        <!-- Unnamed (Rectangle) -->
-        <div id="u33" class="ax_default paragraph">
-          <div id="u33_div" class=""></div>
-          <div id="u33_text" class="text ">
-            <p><span>{{ type }}</span></p>
-          </div>
-        </div>
-
-        <!-- Unnamed (Rectangle) -->
-        <div id="u91" class="ax_default paragraph">
-          <div id="u91_div" class=""></div>
-          <div id="u91_text" class="text ">
-            <p><span>|&nbsp; 查看全部</span></p>
-          </div>
-        </div>
-        {% for dream in dreams %}
-        {{ dreamCard(dream) }}
-        {% endfor %}
-        
-      </div>
+{% macro gridDisplay(data, title) -%}
+  <div>
+    <div class="grid-display-header">
+      <span>{{ title }}</span><span>|&nbsp; 查看全部</span>
+    </div>
+    <div class="grid-display-body">
+      {% for individual_data in data %} <!-- Display detail -->
+        {{ displayCard(individual_data) }} <!-- FIXME: Should have two macros for dream and fanarts. 可以封装一下？ -->
+      {% endfor %}
+    </div>
+  </div>
 {%- endmacro %}
 
-{% macro dreamCard(dream) -%}
-<!-- New7 (Group) -->
-<div id="u289" class="ax_default" data-label="New7" data-left="40" data-top="2001" data-width="470" data-height="186">
+{% macro displayCard(item) -%}
+<div id="{{item.type}}-{{item.id_}}" class="display-card">
+  <!-- 标题 -->
+  <div class="display-card-title">
 
-  <!-- Unnamed (Rectangle) -->
-  <div id="u290" class="ax_default shape">
-    <div id="u290_div" class=""></div>
-    <div id="u290_text" class="text " style="display:none; visibility: hidden">
-      <p></p>
-    </div>
+    {% if item.type == "FanArt" -%}
+      <!-- 原作作者id -->
+      <div class="display-card-original-author">
+        <img class="icon original-author-icon" src="images/1_首页/u129.svg"/>
+        <span>{{ item.father_dream_author.name }}</span>
+      </div>
+    {%- endif %}
+
+    <p>{{ item.title }}</p>
+
   </div>
 
-  <!-- 标题 (Rectangle) -->
-  <div id="u291" class="ax_default paragraph">
-    <div id="u291_div" class=""></div>
-    <div id="u291_text" class="text ">
-      <p><span>{{ dream.title }}</span></p>
-    </div>
+  <!-- 简介 -->
+  <div class="display-card-summary">
+    <p>{{ item.default_summary }}</p>
   </div>
 
-  <!-- 简介 (Rectangle) -->
-  <div id="u292" class="ax_default paragraph">
-    <div id="u292_div" class=""></div>
-    <div id="u292_text" class="text ">
-      <p><span>{{ dream.content }}</span></p>
-    </div>
-  </div>
+  <!-- 社区数据 -->
+  <div class="display-card-numbers">
 
-  <!-- Unnamed (Group) -->
-  <div id="u293" class="ax_default" data-left="60" data-top="2149" data-width="196" data-height="21">
-
-    <!-- Unnamed (Group) -->
-    <div id="u294" class="ax_default" data-left="60" data-top="2152" data-width="64" data-height="18">
-
-      <!-- 阅读量 (Shape) -->
-      <div id="u295" class="ax_default icon">
-        <img id="u295_img" class="img " src="images/1_首页/u42.svg"/>
-        <div id="u295_text" class="text " style="display:none; visibility: hidden">
-          <p></p>
-        </div>
-      </div>
-
-      <!-- Unnamed (Rectangle) -->
-      <div id="u296" class="ax_default paragraph">
-        <div id="u296_div" class=""></div>
-        <div id="u296_text" class="text ">
-          <p><span>{{ dream.views }}</span></p>
-        </div>
-      </div>
+    <!-- 阅读量 -->
+    <div class="display-card-views">
+      <img class="icon views-icon" src="/static/imgs/icons/views.png"/>
+      <span>{{ item.views }}</span>
     </div>
 
-    <!-- 点赞 (Group) -->
-    <div id="u297" class="ax_default" data-left="133" data-top="2149" data-width="61" data-height="21">
-
-      <!-- 点赞 (Shape) -->
-      <div id="u298" class="ax_default icon">
-        <img id="u298_img" class="img " src="images/1_首页/u45.svg"/>
-        <div id="u298_text" class="text " style="display:none; visibility: hidden">
-          <p></p>
-        </div>
-      </div>
-
-      <!-- Unnamed (Rectangle) -->
-      <div id="u299" class="ax_default paragraph">
-        <div id="u299_div" class=""></div>
-        <div id="u299_text" class="text ">
-          <p><span>{{ dream.likes }}</span></p>
-        </div>
-      </div>
+    <!-- 点赞量 -->
+    <div class="display-card-likes">
+      <img class="icon likes-icon" src="/static/imgs/icons/likes.png"/>
+      <span>{{ item.likes }}</span>
     </div>
 
-    <!-- 评论 (Group) -->
-    <div id="u300" class="ax_default" data-left="198" data-top="2150" data-width="58" data-height="20">
-
-      <!-- Unnamed (Shape) -->
-      <div id="u301" class="ax_default icon">
-        <img id="u301_img" class="img " src="images/1_首页/u51.svg"/>
-        <div id="u301_text" class="text " style="display:none; visibility: hidden">
-          <p></p>
-        </div>
-      </div>
-
-      <!-- Unnamed (Rectangle) -->
-      <div id="u302" class="ax_default paragraph">
-        <div id="u302_div" class=""></div>
-        <div id="u302_text" class="text ">
-          <p><span>{{ dream.comments|length }}</span></p>
-        </div>
-      </div>
+    <!-- 评论数 -->
+    <div class="display-card-comments">
+      <img class="icon comments-icon " src="/static/imgs/icons/comments.png"/>
+      <span>{{ item.comments|length }}</span>
     </div>
     
-    {% if dream.num_fan_arts -%}
-    <!-- 二创数量 (Group) -->
-    <div id="u297" class="ax_default" data-left="133" data-top="2149" data-width="61" data-height="21">
-
-      <!-- 二创数量 (Shape) -->
-      <div id="u298" class="ax_default icon">
-        <img id="u298_img" class="img " src="images/1_首页/u45.svg"/>
-        <div id="u298_text" class="text " style="display:none; visibility: hidden">
-          <p></p>
-        </div>
-      </div>
-    
-      <!-- Unnamed (Rectangle) -->
-      <div id="u299" class="ax_default paragraph">
-        <div id="u299_div" class=""></div>
-        <div id="u299_text" class="text ">
-          <p><span>{{ dream.num_fan_arts }}</span></p>
-        </div>
-      </div>
+    {% if item.type == "Dream" -%}
+    <!-- 二创数 -->
+    <div class="display-card-fanarts">
+      <img class="icon fanarts-icon" src="/static/imgs/icons/fanarts.png"/>
+      <span>{{ item.num_fan_arts }}</span>
     </div>
     {%- endif %}
+    
   </div>
 
-  <!-- Unnamed (Group) -->
-  <div id="u303" class="ax_default" data-left="60" data-top="2024" data-width="101" data-height="17">
-
-    <!-- Unnamed (Shape) -->
-    <div id="u304" class="ax_default icon">
-      <img id="u304_img" class="img " src="images/1_首页/u129.svg"/>
-      <div id="u304_text" class="text " style="display:none; visibility: hidden">
-        <p></p>
-      </div>
-    </div>
-  {% if dream.father_dream_author -%}
-    <!-- 原作作者id (Rectangle) -->
-    <div id="u305" class="ax_default paragraph">
-      <div id="u305_div" class=""></div>
-      <div id="u305_text" class="text ">
-        <p><span>{{ dream.father_dream_author.name }}</span></p>
-      </div>
-    </div>
-  {%- endif %}
-  </div>
 </div>
 {%- endmacro %}
 

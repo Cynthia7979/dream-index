@@ -64,10 +64,10 @@
     -->
     <div id="base" class="">
         {{ title }}
-        {{ components.pallete(home_page_displays['dream_trending'],'精选梦境') }}
-        {{ components.pallete(home_page_displays['dream_new'],'最新梦境') }}
-        {{ components.pallete(home_page_displays['fan_art_trending'],'精选二创') }}
-        {{ components.pallete(home_page_displays['fan_art_new'],'最新二创') }}
+        {{ components.gridDisplay(home_page_displays['dream_trending'],'精选梦境') }}
+        {{ components.gridDisplay(home_page_displays['dream_new'],'最新梦境') }}
+        {{ components.gridDisplay(home_page_displays['fan_art_trending'],'精选二创') }}
+        {{ components.gridDisplay(home_page_displays['fan_art_new'],'最新二创') }}
     </div>
 
     {{ components.footer }}
