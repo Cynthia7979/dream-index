@@ -1,14 +1,16 @@
 """
-Sets up all routings of the application.
+Set up routings for the application.
 设置全网站的路由
 """
 
 from dreamindex import app, db
-from flask import render_template, redirect, abort, url_for
+import dreamindex.cookies as cookies
+from flask import render_template, redirect, request, abort, url_for, make_response
 
 
 @app.route('/')
 def home_page():
+    user = cookies.get_login_user()
     home_page_displays = {
         "dream_trending": db.get_dreams(sort="NumberOfLikes", count=4),
         "dream_new": db.get_dreams(sort="PublishTime", count=4),
@@ -16,7 +18,7 @@ def home_page():
         "fan_art_new": db.get_fan_arts(sort="PublishTime", count=4)
     }
 
-    return render_template('home_page.html', home_page_displays=home_page_displays)
+    return render_template('home_page.html', home_page_displays=home_page_displays, user=user)
 
 
 @app.route('/rand/dream/')
@@ -32,14 +34,16 @@ def random_fan_art():
 
 
 @app.route('/new/dream/')
-def create_dream():
-    return '<p>Hello, World!</p>'
+def new_dream():
+    user = cookies.get_login_user()
+    return render_template('new_dream.html', user=user)
 
 
 @app.route('/new/fan-art/')
 @app.route('/new/fan-art/<int:dream_id>')
-def create_fan_art(dream_id):
-    return '<p>Hello, World!</p>'
+def new_fan_art(dream_id):
+    user = cookies.get_login_user()
+    return render_template('new_fanart.html', user=user)
 
 
 @app.route('/dream/<int:dream_id>')
