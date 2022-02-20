@@ -7,6 +7,7 @@ src/dreamindex/logs/*.log
 .idea/
 src/__pycache__/
 *.pyc
+*.code-workspace
 
 # Privacy
 src/dreamindex/databases/*
