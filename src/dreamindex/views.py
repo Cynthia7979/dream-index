@@ -5,6 +5,7 @@ Set up routings for the application.
 
 from dreamindex import app, db
 import dreamindex.cookies as cookies
+import dreamindex.forms as forms
 from flask import render_template, redirect, request, abort, url_for, make_response
 
 
@@ -36,7 +37,8 @@ def random_fan_art():
 @app.route('/new/dream/')
 def new_dream():
     user = cookies.get_login_user()
-    return render_template('new_dream.html', user=user)
+    form = forms.NewDreamForm()
+    return render_template('new_dream.html', user=user, form=form)
 
 
 @app.route('/new/fan-art/')
