@@ -21,7 +21,9 @@ Call with
 
     {{ newComponent }}
 
--Refer to https://stackoverflow.com/questions/15106741/parameterized-reusable-blocks-with-jinja2-flask-templating-engine
+- Read More:
+https://jinja.palletsprojects.com/en/3.0.x/templates/#macros
+https://stackoverflow.com/questions/15106741/parameterized-reusable-blocks-with-jinja2-flask-templating-engine
 and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
 -->
 
@@ -35,6 +37,8 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
     {{ userIcon(userId) }} <!-- TODO -->
   </div>
 {%- endmacro %}
+
+{% macro searchBar()}
 
 {% macro gridDisplay(data, title, link) -%}
   <div class="grid-display">
