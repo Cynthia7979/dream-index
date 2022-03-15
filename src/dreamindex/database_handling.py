@@ -2,11 +2,12 @@
 Connects the code to the SQLite database.
 
 Junction tables were not used for comment linking,
-    because article-comment is a one-to-many relationship
+    because article-comment is a one-to-many relationship,
+    (so was author-article and author-character)
     and can be retrieved by querying the comment table itself.
 
 For article-character, however, junction tables were used because it is a
-    one-to-many relationship (so was author-character).
+    many-to-many relationship.
 
 On Naming:
     Use PascalCasing for tables and column names,
