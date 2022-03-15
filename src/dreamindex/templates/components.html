@@ -27,18 +27,60 @@ https://stackoverflow.com/questions/15106741/parameterized-reusable-blocks-with-
 and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
 -->
 
-{% macro topBar(userId) -%}
+{% macro topBar(user) -%}
   <div class="top-bar">
-    <img src="/static/logo.png" alt="logo" />
+    <img src="/static/img/logo.png" alt="logo" />
     <a href="/rand/dream">随机梦境</a>
     <a href="/rand/fan-art">随机二创</a>
-    {{ searchBar }} <!-- TODO -->
+    {{ searchBar() }}
     <a href="/new/dream">创建梦境</a>
-    {{ userIcon(userId) }} <!-- TODO -->
+    {{ userMenu(user) }}
   </div>
 {%- endmacro %}
 
-{% macro searchBar()}
+<!-- Change to Text Input! -->
+
+{% macro searchBar(defaultQuery='') -%}
+  <div class="search-bar">
+    <span class="default-search-term">
+      <input type="text" placeholder="{{defaultQuery}}"/>
+    </span>
+  </div>
+{%- endmacro %}
+
+{% macro userMenu(user) -%}
+  <div class="user-menu">
+    <a href="/user/{{user.user_id}}">{{ userIcon(user.user_id) }}</a>
+      <div class="user-menu-dropdown">
+        <div class="dropdown-menu-avatar-row">
+          <a href="/user/{{user.user_id}}">
+            {{ userIcon(user.user_id) }}
+            {{ user.name }}
+          </a>
+        </div>
+        <div class="dropdown-menu-row">
+          <img class="icon home-icon" src="/static/imgs/icons/home.png"/>
+          <a href="/user/{{user.user_id}}">个人主页</a>
+        </div>
+        <div class="dropdown-menu-row">
+          <img class="icon settings-icon" src="/static/imgs/icons/home.png"/>
+          <a href="/settings/">设置</a>
+        </div>
+        <div class="dropdown-menu-row">
+          <img class="icon notification-icon" src="/static/imgs/icons/home.png"/>
+          <a href="/notification/">通知</a>
+        </div>
+        <div class="dropdown-menu-row">
+          <img class="icon logout-icon" src="/static/imgs/icons/home.png"/>
+          <a href="/logout/">登出</a>
+        </div>
+      </div>
+  </div>
+{%- endmacro %}
+
+{% macro userIcon(userId) -%}
+  <img class="user-icon" src="/static/img/avatars/{{userId}}.png" alt="User Avatar" />
+{%- endmacro %}
 
 {% macro gridDisplay(data, title, link) -%}
   <div class="grid-display">
