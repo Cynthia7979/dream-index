@@ -1,3 +1,8 @@
+<!--
+    Passed into every page:
+        user - User instance.
+-->
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -11,7 +16,7 @@
 
     <body>
         {% import 'components.html' as components %}
-        {# components.topBar() #}
+        {# components.topBar(user) #}
 
         <div class="page-content">
 
@@ -21,7 +26,7 @@
 
             <div class="homepage-content">
                 {{ title }}
-                {{ components.gridDisplay(home_page_displays['dream_trending'], '精选梦境', '/') }}  <!-- TODO: What do links lead to?-->
+                {{ components.gridDisplay(home_page_displays['dream_trending'], '精选梦境', '/') }}  <!-- TODO: Where do links lead to?-->
                 {{ components.gridDisplay(home_page_displays['dream_new'], '最新梦境', '/') }}
                 {{ components.gridDisplay(home_page_displays['fan_art_trending'], '精选二创', '/') }}
                 {{ components.gridDisplay(home_page_displays['fan_art_new'], '最新二创', '/') }}
