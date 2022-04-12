@@ -1,4 +1,5 @@
-<!-- This is the component collection file.
+<!--
+This is the component collection file.
 All components should be written in this file in either of the following styles.
 
 Macro (with arguments):
@@ -28,13 +29,15 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
 -->
 
 {% macro topBar(user) -%}
-  <div class="top-bar">
-    <img src="/static/img/logo.png" alt="logo" />
-    <a href="/rand/dream">随机梦境</a>
-    <a href="/rand/fan-art">随机二创</a>
-    {{ searchBar() }}
-    <a href="/new/dream">创建梦境</a>
-    {{ userMenu(user) }}
+  <div class="top-bar-region">
+    <div class="top-bar-wrapper">
+      <a href="/"><img src="/static/img/logo.png" alt="logo" /></a>
+      <a href="/rand/dream">随机梦境</a>
+      <a href="/rand/fan-art">随机二创</a>
+      {{ searchBar() }}
+      <a href="/new/dream">创建梦境</a>
+      {{ userMenu(user) }}
+    </div>
   </div>
 {%- endmacro %}
 
