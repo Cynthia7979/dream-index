@@ -31,12 +31,18 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
 {% macro topBar(user) -%}
   <div class="top-bar-region">
     <div class="top-bar-wrapper">
-      <a href="/"><img src="/static/img/logo.png" alt="logo" /></a>
-      <a href="/rand/dream">随机梦境</a>
-      <a href="/rand/fan-art">随机二创</a>
-      {{ searchBar() }}
-      <a href="/new/dream">创建梦境</a>
-      {{ userMenu(user) }}
+      <div class="top-bar-left">
+        <a class="inline-button" href="/"><img src="/static/img/logo.png" alt="logo" /></a>
+        <a class="inline-button" href="/rand/dream">随机梦境</a>
+        <a class="inline-button" href="/rand/fan-art">随机二创</a>
+      </div>
+      <div class="top-bar-middle">
+        {{ searchBar() }}
+      </div>
+      <div class="top-bar-right">
+        <a href="/new/dream" id="create-dream-button" class="primary-button">创建梦境</a>
+        {{ userMenu(user) }}
+      </div>
     </div>
   </div>
 {%- endmacro %}
@@ -46,7 +52,7 @@ and https://www.cnblogs.com/xiaxiaoxu/p/10428508.html
 {% macro searchBar(defaultQuery='') -%}
   <div class="search-bar">
     <span class="default-search-term">
-      <input type="text" placeholder="{{defaultQuery}}"/>
+      <input type="text" placeholder="{{ defaultQuery }}"/>
     </span>
   </div>
 {%- endmacro %}
