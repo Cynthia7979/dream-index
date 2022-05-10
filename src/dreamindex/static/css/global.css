@@ -22,10 +22,13 @@ a:hover {
 .footer {
   background-color: #7F7F7F;
   color: white;
-  height: 100px;
-  margin-top: 40px;
+  height: 80px;
+  margin-top: 20px;
+  /* padding-top: 20px; */
   text-align: center;
   width: 100%;
+  position: absolute;
+  left: 0;
   
   display: flex;
   justify-content: center;
