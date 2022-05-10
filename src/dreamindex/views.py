@@ -62,3 +62,15 @@ def read_fan_art(fan_art_id):
         return render_template('read_fan_art.html')  # TODO
     else:
         abort(404)
+
+# Account-Related 账号相关
+
+@app.route('/signup', methods=["POST", "GET"])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')

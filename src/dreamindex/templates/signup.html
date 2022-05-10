@@ -1,6 +1,6 @@
 <!--
     Arguments:
-        user - User instance of the currently logged in user. None if the user isn't logged in.
+        form - FlaskForm instance of the signup form.
 -->
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
     <head>
         <meta charset="UTF-8">
         <title>注册Dream Index账号</title>
-        <link href="{{ url_for('static',filename='css/homepage.css') }}" type="text/css" rel="stylesheet"/>
+        <link href="{{ url_for('static',filename='css/signup.css') }}" type="text/css" rel="stylesheet"/>
         <link href="{{ url_for('static',filename='css/global.css') }}" type="text/css" rel="stylesheet"/>
     </head>
 
@@ -17,7 +17,17 @@
         {{ components.topBar(user) }}
 
         <div class="page-content">
-            <!-- Write your code here -->
+            <div class="signup-box">
+                <div class="signup-title">
+                    注册新的账号
+                </div>
+
+                <form method="POST" action="/signup">
+                    {{ form.csrf_token }}
+
+                    <!-- Todo -->
+                </form>
+            </div>
         </div>
 
         {{ components.footer }}
