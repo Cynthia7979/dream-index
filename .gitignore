@@ -13,3 +13,4 @@ src/__pycache__/
 src/dreamindex/databases/*
 !src/dreamindex/databases/test_database.db
 !src/dreamindex/databases/test_database.db-journal
+.vscode/extensions.json
