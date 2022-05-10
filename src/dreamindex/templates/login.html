@@ -1,0 +1,25 @@
+<!--
+    Arguments:
+        user - User instance of the currently logged in user. None if the user isn't logged in.
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>登录Dream Index</title>
+        <link href="{{ url_for('static',filename='css/homepage.css') }}" type="text/css" rel="stylesheet"/>
+        <link href="{{ url_for('static',filename='css/global.css') }}" type="text/css" rel="stylesheet"/>
+    </head>
+
+    <body>
+        {% import 'components.html' as components %}
+        {{ components.topBar(user) }}
+
+        <div class="page-content">
+            <!-- Write your code here -->
+        </div>
+
+        {{ components.footer }}
+    </body>
+</html>
