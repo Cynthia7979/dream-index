@@ -34,18 +34,20 @@ def random_fan_art():
     redirect(url_for(f'/dream/{random_fan_art_id}'))
 
 
-@app.route('/new/dream/')
+@app.route('/new/dream/', methods=['GET', 'POST'])
 def new_dream():
-    user = cookies.get_login_user()
-    form = forms.NewDreamForm()
-    return render_template('new_dream.html', user=user, form=form)
+    if request.method == 'GET':
+        user = cookies.get_login_user()
+        form = forms.NewDreamForm()
+        return render_template('new_dream.html', user=user, form=form)
 
 
-@app.route('/new/fan-art/')
-@app.route('/new/fan-art/<int:dream_id>')
+@app.route('/new/fan-art/', methods=['GET', 'POST'])
+@app.route('/new/fan-art/<int:dream_id>', methods=['GET'])
 def new_fan_art(dream_id):
-    user = cookies.get_login_user()
-    return render_template('new_fanart.html', user=user)
+    if request.method == 'GET':
+        user = cookies.get_login_user()
+        return render_template('new_fanart.html', user=user)
 
 
 @app.route('/dream/<int:dream_id>')
