@@ -20,6 +20,7 @@ PublishTime Format: YYYY-MM-DD HH:MM:SS.SSS
 Refer to the following link for additional naming conventions:
 https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions
 """
+
 from dreamindex.logging import logged, get_file_logger
 from dreamindex.instances import *
 import sqlite3
@@ -244,7 +245,7 @@ class Database:
         return fan_arts
 
     def get_user(self, user_id=None, user_name=None):
-        assert user_id or user_name, 'You must pass EITHER username or user ID.'
+        assert self.user_exists(user_id, user_name)
         user = User(*(self._perform_query(
             table='User',
             condition=f'UserID={user_id}' if user_id else f'UserName={user_name}',
@@ -259,6 +260,10 @@ class Database:
 
     def fan_art_exists(self, fan_art_id):
         return self._exists('FanArt', f'FanArtID={fan_art_id}')
+    
+    def user_exists(self, user_id=None, user_name=None):
+        assert (user_id or user_name) and not (user_id and user_name), 'You must pass EITHER username or user ID.'
+        return self._exists('User', f'UserID={user_id}' if user_id else f'UserName={user_name}')
 
     def _exists(self, table, condition):
         self.cur.execute(f"""SELECT EXISTS(SELECT 1 FROM {table} WHERE {condition});""")
